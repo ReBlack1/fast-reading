@@ -7,7 +7,7 @@ MAX_CROPE_SIZE = 7
 
 
 def imgs_to_video(img_path, black_path, out_path, x_size, y_size, w_list, black_time, out=None, save=False):
-    n = 1
+    n = 2
     if out is None:
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         out = cv2.VideoWriter(out_path, fourcc, 60, (x_size, y_size))  # создаем видео
@@ -19,9 +19,9 @@ def imgs_to_video(img_path, black_path, out_path, x_size, y_size, w_list, black_
                 crope_time = j
                 if crope_time >= MAX_CROPE_SIZE:
                     crope_time = MAX_CROPE_SIZE
-                img = img[crope_time * n:256 - crope_time * n, crope_time * n * 2:512 - crope_time * n * 2, :]
+                img = img[crope_time * n:y_size - crope_time * n, crope_time * n * 2:x_size - crope_time * n * 2, :]
                 if img.size > 0:
-                    img = cv2.resize(img, (512, 256), interpolation=cv2.INTER_AREA)  # Плавное приближение
+                    img = cv2.resize(img, (x_size, y_size), interpolation=cv2.INTER_AREA)  # Плавное приближение
             out.write(img)
             # print(img)
             # if img is not None:
@@ -47,9 +47,14 @@ def imgs_to_video(img_path, black_path, out_path, x_size, y_size, w_list, black_
 # cv2.waitKey()
 # exit()
 
-frame_maker_e = FrameMaker()
+frame_maker_e = FrameMaker(x_size=512, y_size=256)
 # frame_maker_e.NORMAL_TIMEFRAME = 12
 # frame_maker_e.LONG_TIMEFRAME = 15
+
+frame_maker_e.SHORT_TIMEFRAME = 4
+frame_maker_e.NORMAL_TIMEFRAME = 8
+frame_maker_e.LONG_TIMEFRAME = 9
+frame_maker_e.VERY_LONG_TIMEFRAME = 12
 
 frame_maker_e.make_start_frames()
 
